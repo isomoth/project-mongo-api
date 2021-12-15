@@ -20,13 +20,13 @@ app.use(cors());
 app.use(express.json());
 
 // Our own middleware that checks if the database is connected before going forward to our endpoints
-/* app.use((req, res, next) => {
+app.use((req, res, next) => {
   if (mongoose.connection.readyState === 1) {
     next();
   } else {
     res.status(503).json({ error: 'Service unavailable' });
   }
-}); */
+});
 
 // Default route
 app.get('/', (req, res) => {
@@ -39,7 +39,6 @@ app.get('/endpoints', (req, res) => {
 });
 
 // Seed the database
-
 const Track = mongoose.model('Track', {
   id: Number,
   trackName: String,
@@ -59,7 +58,6 @@ const Track = mongoose.model('Track', {
 });
 
 // Avoid duplicates upon restarting
-
 if (process.env.RESET_DB) {
   const seedDatabase = async () => {
     await Track.deleteMany({});
@@ -72,14 +70,15 @@ if (process.env.RESET_DB) {
   seedDatabase();
 }
 
-// Get all tracks. Optional: Filter by year
-// Example: /tracks/?year=2016
+// Get all tracks. Optional queries: Filter by trackName, artistName, genre, year, bpm...
+// Examples: /tracks/?year=2016
+// Examples: /tracks/?bpm=80
 
 app.get('/tracks/', async (req, res) => {
   let tracks = await Track.find(req.query).limit(10);
   if (tracks) {
-    /*  Get tracks for your party (i.e. danceability over the number you specify. Test with different values, i.e. 70 if you're looking for more energetic dances.)
-     */
+    // Get tracks for your party (i.e. danceability based on the number you specify).
+    // Test with different values. For example, choose 70 if you're looking for more energetic dances.
     // Example: /tracks/?danceability=60
     if (req.query.danceability) {
       const songsByDanceability = await Track.find().gt(
@@ -95,7 +94,6 @@ app.get('/tracks/', async (req, res) => {
 });
 
 // Get track by ID
-
 app.get('/tracks/id/:id', async (req, res) => {
   try {
     const trackById = await Track.findById(req.params.id);
@@ -110,7 +108,6 @@ app.get('/tracks/id/:id', async (req, res) => {
 });
 
 // Get all songs by Billie Eilish
-
 app.get('/tracks/artist/billie_eilish', (req, res) => {
   Track.find({ artistName: 'Billie Eilish' }, (error, data) => {
     if (error) {
@@ -122,7 +119,6 @@ app.get('/tracks/artist/billie_eilish', (req, res) => {
 });
 
 // Get tracks from the pop genre
-
 app.get('/tracks/genre/pop', (req, res) => {
   Track.find({ genre: 'pop' }, (error, data) => {
     if (error) {
@@ -134,7 +130,6 @@ app.get('/tracks/genre/pop', (req, res) => {
 });
 
 // Get tracks for your workout, i.e. energy > 80. No parameters needed.
-
 app.get('/tracks/playlists/workout/', (req, res) => {
   Track.find({ energy: { $gte: 80 } }, (error, tracks) => {
     if (error) {
@@ -146,7 +141,6 @@ app.get('/tracks/playlists/workout/', (req, res) => {
 });
 
 // Get calm tracks for a cozy time at home, i.e. energy < 20. No parameters needed.
-
 app.get('/tracks/playlists/calm/', (req, res) => {
   Track.find({ energy: { $lte: 20 } }, (error, tracks) => {
     if (error) {
