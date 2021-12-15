@@ -76,8 +76,22 @@ if (process.env.RESET_DB) {
 // Example: /tracks/?year=2016
 
 app.get('/tracks/', async (req, res) => {
-  const tracks = await Track.find(req.query).limit(10);
-  res.json(tracks);
+  let tracks = await Track.find(req.query).limit(10);
+  if (tracks) {
+    /*  Get tracks for your party (i.e. danceability over the number you specify. Test with different values, i.e. 70 if you're looking for more energetic dances.)
+     */
+    // Example: /tracks/?danceability=60
+    if (req.query.danceability) {
+      const songsByDanceability = await Track.find().gt(
+        'danceability',
+        req.query.danceability,
+      );
+      tracks = songsByDanceability;
+    }
+    res.json(tracks);
+  } else {
+    res.status(404).json({ error: 'Not found' });
+  }
 });
 
 // Get track by ID
@@ -95,10 +109,10 @@ app.get('/tracks/id/:id', async (req, res) => {
   }
 });
 
-// Get all songs by Drake
+// Get all songs by Billie Eilish
 
-app.get('/tracks/artist/drake', (req, res) => {
-  Track.find({ artistName: 'Drake' }, (error, data) => {
+app.get('/tracks/artist/billie_eilish', (req, res) => {
+  Track.find({ artistName: 'Billie Eilish' }, (error, data) => {
     if (error) {
       res.status(404).json({ error: 'Not found' });
     } else {
@@ -122,11 +136,23 @@ app.get('/tracks/genre/pop', (req, res) => {
 // Get tracks for your workout, i.e. energy > 80. No parameters needed.
 
 app.get('/tracks/playlists/workout/', (req, res) => {
-  Track.find({ energy: { $gte: 80 } }, (error, data) => {
+  Track.find({ energy: { $gte: 80 } }, (error, tracks) => {
     if (error) {
       res.status(404).json({ error: 'Not found' });
     } else {
-      res.send(data);
+      res.send(tracks);
+    }
+  });
+});
+
+// Get calm tracks for a cozy time at home, i.e. energy < 20. No parameters needed.
+
+app.get('/tracks/playlists/calm/', (req, res) => {
+  Track.find({ energy: { $lte: 20 } }, (error, tracks) => {
+    if (error) {
+      res.status(404).json({ error: 'Not found' });
+    } else {
+      res.send(tracks);
     }
   });
 });
