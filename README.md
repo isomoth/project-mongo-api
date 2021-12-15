@@ -14,8 +14,8 @@ This is my second API project. I learned to "translate" Express queries from a p
 - This is an enhancement of my Express API project: https://github.com/isomoth/project-express-api
 - The first route was /tracks. First I console.logged the data and then implemented it as the API response.
 - Then I proceeded to do the routes that return the collections, and finally the single results (including the ones with query params).
-  I implemented filters that simulates a rudimentary playlist mechanism. One of the routes displays tracks that are suitable for a party by filtering by the danceability parameter. The other two routes filter tracks through the energy parameter to present a collection of workout songs and another with a calm mood.
-- Last but not least, I implemented error handling on all routes (this is an improvement from the Express API project, where not all of them had it).
+  I created filters that simulate a rudimentary playlist mechanism. One of the routes displays tracks that are suitable for a party by filtering by the danceability parameter. The other two routes filter tracks through the energy parameter to present a collection of workout songs and another with a calm mood.
+- Last but not least, I added error handling to all routes (this is an improvement from the Express API project, where not all of them had it).
 - Another enhancement from last week was the implementation of pagination (with the limit method).
 
 ## Challenges and lessons learned
