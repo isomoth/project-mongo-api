@@ -20,13 +20,13 @@ app.use(cors());
 app.use(express.json());
 
 // Our own middleware that checks if the database is connected before going forward to our endpoints
-app.use((req, res, next) => {
+/* app.use((req, res, next) => {
   if (mongoose.connection.readyState === 1) {
     next();
   } else {
     res.status(503).json({ error: 'Service unavailable' });
   }
-});
+}); */
 
 // Default route
 app.get('/', (req, res) => {
