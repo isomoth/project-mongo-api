@@ -26,5 +26,5 @@ This is my second API project, documented via Swagger. I learned to "translate" 
 
 ## View it live
 
-- Documented version: https://top-tracks-isabel-mongodb.herokuapp.com//docs
+- Documented version: https://top-tracks-isabel-mongodb.herokuapp.com/api-docs
 - Heroku version: https://top-tracks-isabel-mongodb.herokuapp.com/
